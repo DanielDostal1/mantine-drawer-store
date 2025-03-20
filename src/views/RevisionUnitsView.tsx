@@ -1,18 +1,24 @@
 import { Button, Text } from "@mantine/core";
+import { randomId } from "@mantine/hooks";
+import { useCallback } from "react";
 import { ViewLayout } from "../ViewLayout";
-import { RevisionUnitDrawer } from "../drawers/RevisionUnitDrawer";
-import { useDisclosure } from "@mantine/hooks";
+import useDrawerStore from "../drawerStore";
 
 const RevisionUnitsView = () => {
-  const [opened, { open, close }] = useDisclosure();
+  const { openDrawer } = useDrawerStore();
+
+  const openRevisionUnitDrawer = useCallback(() => {
+    openDrawer({ id: randomId(), type: "revisionUnit", entityId: "1" });
+  }, [openDrawer]);
 
   return (
     <>
       <ViewLayout>
         <Text fz="xl">Revision Units View</Text>
-        <Button onClick={open}>Open Revision Unit Drawer</Button>
+        <Button onClick={openRevisionUnitDrawer}>
+          Open Revision Unit Drawer
+        </Button>
       </ViewLayout>
-      <RevisionUnitDrawer opened={opened} onClose={close} />
     </>
   );
 };

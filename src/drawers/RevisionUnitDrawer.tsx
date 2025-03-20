@@ -1,19 +1,32 @@
 import { Button, Drawer, DrawerProps, Stack } from "@mantine/core";
-import { HomeDrawer } from "./HomeDrawer";
-import { TechnicalObjectDrawer } from "./TechnicalObjectDrawer";
-import { useDisclosure } from "@mantine/hooks";
+import { randomId } from "@mantine/hooks";
+import { useCallback } from "react";
+import useDrawerStore from "../drawerStore";
+
+type RevisionUnitDrawerProps = DrawerProps & {
+  revisionUnitId?: string;
+  customProp1?: string;
+};
 
 export const RevisionUnitDrawer = ({
+  revisionUnitId,
   opened,
   onClose,
+  customProp1,
   ...props
-}: DrawerProps) => {
-  const [homeDrawerOpened, { open: openHomeDrawer, close: closeHomeDrawer }] =
-    useDisclosure();
-  const [
-    technicalObjectDrawerOpened,
-    { open: openTechnicalObjectDrawer, close: closeTechnicalObjectDrawer },
-  ] = useDisclosure();
+}: RevisionUnitDrawerProps) => {
+  const { openDrawer } = useDrawerStore();
+
+  const openTechnicalObjectDrawer = useCallback(() => {
+    openDrawer({
+      id: randomId(),
+      type: "technicalObject",
+      entityId: "1",
+      customProps: { customProp2: "aa" },
+    });
+  }, [openDrawer]);
+
+  console.log("RevisionUnitDrawer", revisionUnitId, customProp1);
 
   return (
     <>
@@ -25,17 +38,11 @@ export const RevisionUnitDrawer = ({
       >
         <Stack>
           Revision Unit Drawer
-          <Button onClick={openHomeDrawer}>Open Home Drawer</Button>
           <Button onClick={openTechnicalObjectDrawer}>
             Open Technical Object Drawer
           </Button>
         </Stack>
       </Drawer>
-      <HomeDrawer opened={homeDrawerOpened} onClose={closeHomeDrawer} />
-      <TechnicalObjectDrawer
-        opened={technicalObjectDrawerOpened}
-        onClose={closeTechnicalObjectDrawer}
-      />
     </>
   );
 };

@@ -1,18 +1,29 @@
 import { Button, Text } from "@mantine/core";
 import { ViewLayout } from "../ViewLayout";
-import { TechnicalObjectDrawer } from "../drawers/TechnicalObjectDrawer";
-import { useDisclosure } from "@mantine/hooks";
+import { randomId } from "@mantine/hooks";
+import { useCallback } from "react";
+import useDrawerStore from "../drawerStore";
 
 const TechnicalObjectsView = () => {
-  const [opened, { open, close }] = useDisclosure();
+  const { openDrawer } = useDrawerStore();
+
+  const openTechnicalObjectDrawer = useCallback(() => {
+    openDrawer({
+      id: randomId(),
+      type: "technicalObject",
+      entityId: "1",
+      customProps: { customProp2: "aa" },
+    });
+  }, [openDrawer]);
 
   return (
     <>
       <ViewLayout>
-        <Text fz="xl">Revision Units View</Text>
-        <Button onClick={open}>Open Technical Object Drawer</Button>
+        <Text fz="xl">Technical Objects View</Text>
+        <Button onClick={openTechnicalObjectDrawer}>
+          Open Technical Object Drawer
+        </Button>
       </ViewLayout>
-      <TechnicalObjectDrawer opened={opened} onClose={close} />
     </>
   );
 };
