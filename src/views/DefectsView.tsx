@@ -4,29 +4,27 @@ import { useCallback } from "react";
 import { ViewLayout } from "../ViewLayout";
 import useDrawerStore from "../drawerStore";
 
-const RevisionUnitsView = () => {
+const DefectsView = () => {
   const { openDrawer } = useDrawerStore();
 
-  const openRevisionUnitDrawer = useCallback(() => {
+  const openDefectDrawer = useCallback(() => {
     openDrawer({
       id: randomId(),
-      type: "revisionUnit",
+      type: "defect",
       entityId: "1",
       drawerProps: { size: "md" },
-      customProps: { customProp1: "aa" },
+      customProps: { customProp3: "custom prop 3" },
     });
   }, [openDrawer]);
 
   return (
     <>
       <ViewLayout>
-        <Text fz="xl">Revision Units View</Text>
-        <Button onClick={openRevisionUnitDrawer}>
-          Open Revision Unit Drawer
-        </Button>
+        <Text fz="xl">Defects View</Text>
+        <Button onClick={openDefectDrawer}>Open Defect Drawer</Button>
       </ViewLayout>
     </>
   );
 };
 
-export default RevisionUnitsView;
+export default DefectsView;

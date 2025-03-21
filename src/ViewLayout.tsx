@@ -11,9 +11,9 @@ export const ViewLayout = ({ children, ...props }: ViewLayoutProps) => {
       <AppShell.Navbar bg="gray.0">
         <AppShell.Section>
           <Stack gap={4} p={8}>
-            <NavbarLink to="/" label="Home" />
-            <NavbarLink to="/technical-objects" label="Technické objekty" />
-            <NavbarLink to="/revision-units" label="Revízne celky" />
+            <NavbarLink to="/" label="Defects" />
+            <NavbarLink to="/technical-objects" label="Technical Objects" />
+            <NavbarLink to="/revision-units" label="Revision Units" />
           </Stack>
         </AppShell.Section>
       </AppShell.Navbar>

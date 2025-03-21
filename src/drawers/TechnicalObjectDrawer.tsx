@@ -28,6 +28,16 @@ export const TechnicalObjectDrawer = ({
     });
   }, [openDrawer]);
 
+  const openDefectDrawer = useCallback(() => {
+    openDrawer({
+      id: randomId(),
+      type: "defect",
+      entityId: "1",
+      drawerProps: { size: "md" },
+      customProps: { customProp3: "custom prop 3" },
+    });
+  }, [openDrawer]);
+
   return (
     <>
       <Drawer
@@ -37,10 +47,10 @@ export const TechnicalObjectDrawer = ({
         {...props}
       >
         <Stack>
-          TechnicalObject Drawer
           <Button onClick={openRevisionUnitDrawer}>
             Open Revision Unit Drawer
           </Button>
+          <Button onClick={openDefectDrawer}>Open Defect Drawer</Button>
         </Stack>
       </Drawer>
     </>
