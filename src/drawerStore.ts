@@ -56,13 +56,14 @@ type DrawerStore = {
     customProps?: Omit<ExtractProps<T>, "type">;
   }) => void;
 
-  closeDrawer: (id: string) => void;
-  closeTopDrawer: () => void;
+  closeDrawer: (id: string) => void; // Close drawer with animation
+  removeDrawer: (id: string) => void;
+  // closeTopDrawer: () => void;
   clearDrawers: () => void;
-  getTopDrawer: () => Drawer<DrawerTypes> | null;
+  // getTopDrawer: () => Drawer<DrawerTypes> | null;
 };
 
-const useDrawerStore = create<DrawerStore>((set, get) => {
+const useDrawerStore = create<DrawerStore>((set) => {
   function openDrawer<T extends DrawerTypes>({
     id,
     type,
@@ -97,14 +98,25 @@ const useDrawerStore = create<DrawerStore>((set, get) => {
 
   function updateDrawer({
     id,
+    entityId,
     drawerProps,
+    customProps,
   }: {
     id: string;
-    drawerProps: DrawerProps;
+    entityId?: string;
+    drawerProps?: DrawerProps;
+    customProps?: DrawerCustomProps;
   }) {
     set((state: DrawerStore) => ({
       drawers: state.drawers.map((drawer) =>
-        drawer.id === id ? { ...drawer, drawerProps } : drawer,
+        drawer.id === id
+          ? {
+              ...drawer,
+              entityId: entityId || drawer.entityId,
+              drawerProps: { ...drawer.drawerProps, ...drawerProps },
+              customProps: { ...drawer.customProps, ...customProps },
+            }
+          : drawer,
       ),
     }));
   }
@@ -120,27 +132,16 @@ const useDrawerStore = create<DrawerStore>((set, get) => {
     }));
   }
 
-  function closeTopDrawer() {
-    set((state: DrawerStore) => ({
-      drawers: state.drawers.slice(0, -1),
-    }));
-  }
-
   function clearDrawers() {
     set({ drawers: [] });
-  }
-
-  function getTopDrawer() {
-    return get().drawers[get().drawers.length - 1] || null;
   }
 
   return {
     drawers: [],
     openDrawer,
     closeDrawer,
-    closeTopDrawer,
+    removeDrawer,
     clearDrawers,
-    getTopDrawer,
   };
 });
 

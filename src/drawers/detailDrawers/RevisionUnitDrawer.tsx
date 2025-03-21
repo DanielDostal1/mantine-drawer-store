@@ -1,7 +1,8 @@
 import { Button, Drawer, DrawerProps, Stack } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { useCallback } from "react";
-import useDrawerStore from "../drawerStore";
+import useFormDrawerStore from "../../formDrawerStore";
+import useDrawerStore from "../../drawerStore";
 
 type RevisionUnitDrawerProps = DrawerProps & {
   revisionUnitId?: string;
@@ -18,6 +19,7 @@ export const RevisionUnitDrawer = ({
   console.log("RevisionUnitDrawer", revisionUnitId, customProp1);
 
   const { openDrawer } = useDrawerStore();
+  const { openFormDrawer } = useFormDrawerStore();
 
   const openTechnicalObjectDrawer = useCallback(() => {
     openDrawer({
@@ -38,6 +40,14 @@ export const RevisionUnitDrawer = ({
     });
   }, [openDrawer]);
 
+  const openRevisionUnitFormDrawer = useCallback(() => {
+    openFormDrawer({
+      id: randomId(),
+      type: "revisionUnit",
+      entityId: revisionUnitId || "1",
+    });
+  }, [openFormDrawer, revisionUnitId]);
+
   return (
     <>
       <Drawer
@@ -51,6 +61,9 @@ export const RevisionUnitDrawer = ({
             Open Technical Object Drawer
           </Button>
           <Button onClick={openDefectDrawer}>Open Defect Drawer</Button>
+          <Button mt="xl" onClick={openRevisionUnitFormDrawer}>
+            Open Revision Unit Form Drawer
+          </Button>
         </Stack>
       </Drawer>
     </>
