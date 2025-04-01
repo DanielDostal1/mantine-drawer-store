@@ -2,7 +2,7 @@ import { Button, Drawer, DrawerProps, Stack } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { useCallback } from "react";
 import useFormDrawerStore from "../../formDrawerStore";
-import useDrawerStore from "../../drawerStore";
+import useDrawerStore from "../../_drawerStore";
 
 type TechnicalObjctDrawerProps = DrawerProps & {
   technicalObjectId?: string;

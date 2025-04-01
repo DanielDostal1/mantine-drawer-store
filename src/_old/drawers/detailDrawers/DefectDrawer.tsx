@@ -2,21 +2,21 @@ import { Button, Drawer, DrawerProps, Stack } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { useCallback } from "react";
 import useFormDrawerStore from "../../formDrawerStore";
-import useDrawerStore from "../../drawerStore";
+import useDrawerStore from "../../_drawerStore";
 
-type RevisionUnitDrawerProps = DrawerProps & {
-  revisionUnitId?: string;
-  customProp1?: string;
+type DefectDrawerProps = DrawerProps & {
+  defectId?: string;
+  customProp3?: string;
 };
 
-export const RevisionUnitDrawer = ({
-  revisionUnitId,
+export const DefectDrawer = ({
+  defectId,
   opened,
   onClose,
-  customProp1,
+  customProp3,
   ...props
-}: RevisionUnitDrawerProps) => {
-  console.log("RevisionUnitDrawer", revisionUnitId, customProp1);
+}: DefectDrawerProps) => {
+  console.log("DefectDrawer", defectId, customProp3);
 
   const { openDrawer } = useDrawerStore();
   const { openFormDrawer } = useFormDrawerStore();
@@ -30,39 +30,41 @@ export const RevisionUnitDrawer = ({
     });
   }, [openDrawer]);
 
-  const openDefectDrawer = useCallback(() => {
+  const openRevisionUnitDrawer = useCallback(() => {
     openDrawer({
       id: randomId(),
-      type: "defect",
+      type: "revisionUnit",
       entityId: "1",
-      drawerProps: { size: "md" },
-      customProps: { customProp3: "custom prop 3" },
+      customProps: { customProp1: "bb" },
     });
   }, [openDrawer]);
 
-  const openRevisionUnitFormDrawer = useCallback(() => {
+  const openDefectFormDrawer = useCallback(() => {
     openFormDrawer({
       id: randomId(),
-      type: "revisionUnit",
-      entityId: revisionUnitId || "1",
+      type: "defect",
+      entityId: defectId || "1",
+      customProps: { customFormProp3: "cc" },
     });
-  }, [openFormDrawer, revisionUnitId]);
+  }, [openFormDrawer, defectId]);
 
   return (
     <>
       <Drawer
         opened={opened}
         onClose={onClose}
-        title="Revision Unit Drawer"
+        title="Defect Drawer"
         {...props}
       >
         <Stack>
           <Button onClick={openTechnicalObjectDrawer}>
             Open Technical Object Drawer
           </Button>
-          <Button onClick={openDefectDrawer}>Open Defect Drawer</Button>
-          <Button mt="xl" onClick={openRevisionUnitFormDrawer}>
-            Open Revision Unit Form Drawer
+          <Button onClick={openRevisionUnitDrawer}>
+            Open Revision Unit Drawer
+          </Button>
+          <Button mt="xl" onClick={openDefectFormDrawer}>
+            Open Defect Form Drawer
           </Button>
         </Stack>
       </Drawer>

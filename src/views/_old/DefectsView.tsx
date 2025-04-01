@@ -1,8 +1,8 @@
 import { Button, Text } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
 import { useCallback } from "react";
-import { ViewLayout } from "../ViewLayout";
-import useDrawerStore from "../drawerStore";
+import { ViewLayout } from "../../ViewLayoutout";
+import useDrawerStore from "../../_old/_drawerStore";
 
 const DefectsView = () => {
   const { openDrawer } = useDrawerStore();
