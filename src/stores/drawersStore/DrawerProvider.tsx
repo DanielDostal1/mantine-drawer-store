@@ -1,15 +1,16 @@
 import { PropsWithChildren, useState } from "react";
-import { CommonDrawerProps } from "./types";
+import createDrawerStore, { CreateDrawerStoreProps } from "./createDrawerStore";
 import { DrawerContext } from "./DrawerContext";
 import { DrawerStack } from "./DrawerStack";
-import { createDrawerStore } from "./createDrawerStore";
 
-type DrawerProviderProps = PropsWithChildren & {
-  initialDrawers?: CommonDrawerProps[];
-};
+type DrawerProviderProps = PropsWithChildren & CreateDrawerStoreProps;
 
-export const DrawerProvider = ({ children, initialDrawers = [] }: DrawerProviderProps) => {
-  const [store] = useState(() => createDrawerStore(initialDrawers));
+export const DrawerProvider = ({
+  children,
+  initialDrawers = [],
+}: DrawerProviderProps) => {
+  const [store] = useState(() => createDrawerStore({ initialDrawers }));
+
   return (
     <DrawerContext.Provider value={store}>
       {children}

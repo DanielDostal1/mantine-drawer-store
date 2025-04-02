@@ -1,6 +1,6 @@
 import { Button, Drawer, DrawerProps, Stack } from "@mantine/core";
 import { useCallback } from "react";
-import useDrawerStore from "../../drawersStore";
+import { useFormDrawerActions } from "../../stores/drawersStore/hooks";
 
 type GreenFormDrawerProps = DrawerProps & {
   index: number;
@@ -18,7 +18,7 @@ export const GreenFormDrawer = ({
 }: GreenFormDrawerProps) => {
   console.log({ greenEntityId, greenProp });
 
-  const { openFormDrawer } = useDrawerStore();
+  const { openFormDrawer } = useFormDrawerActions();
 
   const openBlueFormDrawer = useCallback(() => {
     openFormDrawer({
