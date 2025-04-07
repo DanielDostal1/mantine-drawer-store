@@ -7,7 +7,7 @@ import { GreenDrawer } from "../../drawers/GreenDrawer";
 import { RedDrawer } from "../../drawers/RedDrawer";
 import { useDrawers, useDrawerStore } from "./hooks";
 
-export const DrawerStack = () => {
+export const DrawerRenderer = () => {
   const drawers = useDrawers();
   const priorityDrawerIndexStack = useDrawerStore(
     (state) => state.priorityDrawerIndexStack,

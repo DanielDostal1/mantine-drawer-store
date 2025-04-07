@@ -1,7 +1,7 @@
 import { PropsWithChildren, useMemo } from "react";
 import createDrawerStore, { CreateDrawerStoreProps } from "./createDrawerStore";
 import { DrawerContext } from "./DrawerContext";
-import { DrawerStack } from "./DrawerRenderer";
+import { DrawerRenderer } from "./DrawerRenderer";
 
 type DrawerProviderProps = PropsWithChildren & CreateDrawerStoreProps;
 
@@ -17,7 +17,7 @@ export const DrawerProvider = ({
   return (
     <DrawerContext.Provider value={store}>
       {children}
-      <DrawerStack />
+      <DrawerRenderer />
     </DrawerContext.Provider>
   );
 };

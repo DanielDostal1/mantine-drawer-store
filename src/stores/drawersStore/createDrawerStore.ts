@@ -31,10 +31,7 @@ const createDrawerStore = ({ initialDrawers = [] }: CreateDrawerStoreProps) =>
         }
       }
       closeDrawer(stackIndex); // Close all drawers after the current one
-      setTimeout(
-        () => _openDrawer({ stackIndex, type, isPriorityDrawer, drawerProps }),
-        0,
-      );
+      _openDrawer({ stackIndex, type, isPriorityDrawer, drawerProps });
     }
 
     function _openDrawer<T extends DrawerTypes>({
