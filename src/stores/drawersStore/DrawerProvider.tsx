@@ -1,7 +1,7 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useMemo } from "react";
 import createDrawerStore, { CreateDrawerStoreProps } from "./createDrawerStore";
 import { DrawerContext } from "./DrawerContext";
-import { DrawerStack } from "./DrawerStack";
+import { DrawerStack } from "./DrawerRenderer";
 
 type DrawerProviderProps = PropsWithChildren & CreateDrawerStoreProps;
 
@@ -9,7 +9,10 @@ export const DrawerProvider = ({
   children,
   initialDrawers = [],
 }: DrawerProviderProps) => {
-  const [store] = useState(() => createDrawerStore({ initialDrawers }));
+  const store = useMemo(
+    () => createDrawerStore({ initialDrawers }),
+    [initialDrawers],
+  );
 
   return (
     <DrawerContext.Provider value={store}>

@@ -1,9 +1,9 @@
 import { Button, Drawer, DrawerProps, Stack } from "@mantine/core";
 import { useCallback } from "react";
-import { useFormDrawerActions } from "../../stores/drawersStore/hooks";
+import { useDrawerActions } from "../../stores/drawersStore/hooks";
 
 type RedFormDrawerProps = DrawerProps & {
-  index: number;
+  stackIndex: number;
   redEntityId?: string;
   redProp?: string;
 };
@@ -11,28 +11,30 @@ type RedFormDrawerProps = DrawerProps & {
 export const RedFormDrawer = ({
   opened,
   onClose,
-  index,
+  stackIndex,
   redEntityId,
   redProp,
   ...props
 }: RedFormDrawerProps) => {
   console.log({ redEntityId, redProp });
 
-  const { openFormDrawer } = useFormDrawerActions();
+  const { openDrawer } = useDrawerActions();
 
   const openBlueFormDrawer = useCallback(() => {
-    openFormDrawer({
-      index: index + 1,
-      type: "blue",
+    openDrawer({
+      stackIndex: stackIndex + 1,
+      type: "blueForm",
+      isPriorityDrawer: true,
     });
-  }, [index, openFormDrawer]);
+  }, [stackIndex, openDrawer]);
 
   const openGreenFormDrawer = useCallback(() => {
-    openFormDrawer({
-      index: index + 1,
-      type: "green",
+    openDrawer({
+      stackIndex: stackIndex + 1,
+      type: "greenForm",
+      isPriorityDrawer: true,
     });
-  }, [index, openFormDrawer]);
+  }, [stackIndex, openDrawer]);
 
   return (
     <>

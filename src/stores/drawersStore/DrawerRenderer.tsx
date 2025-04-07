@@ -5,66 +5,37 @@ import { GreenFormDrawer } from "../../drawers/formDrawers/GreenFormDrawer";
 import { RedFormDrawer } from "../../drawers/formDrawers/RedFormDrawer";
 import { GreenDrawer } from "../../drawers/GreenDrawer";
 import { RedDrawer } from "../../drawers/RedDrawer";
-import { useDrawers, useFormDrawers, useDrawerStore } from "./hooks";
+import { useDrawers, useDrawerStore } from "./hooks";
 
 export const DrawerStack = () => {
   const drawers = useDrawers();
-  const formDrawers = useFormDrawers();
+  const priorityDrawerIndexStack = useDrawerStore(
+    (state) => state.priorityDrawerIndexStack,
+  );
 
   const closeDrawer = useDrawerStore((state) => state.actions.closeDrawer);
-  const closeFormDrawer = useDrawerStore(
-    (state) => state.formActions.closeFormDrawer,
-  );
 
   return (
     <>
-      {formDrawers.map((formDrawer, i) => {
-        const commonFormDrawerProps = {
-          position: "right" as DrawerProps["position"],
-          index: formDrawer.index,
-          ...formDrawer.formDrawerProps,
-          closeOnEscape:
-            formDrawer.formDrawerProps?.closeOnEscape !== undefined
-              ? formDrawer.formDrawerProps.closeOnEscape
-              : formDrawers.length === i + 1,
-          opened:
-            formDrawer.formDrawerProps?.opened === undefined
-              ? true
-              : formDrawer.formDrawerProps?.opened,
-          onClose: () => {
-            closeFormDrawer(formDrawer.index);
-            formDrawer.formDrawerProps?.onClose?.();
-          },
-          withOverlay: false,
-        };
-
-        switch (formDrawer.type) {
-          case "red":
-            return <RedFormDrawer key={i} {...commonFormDrawerProps} />;
-          case "green":
-            return <GreenFormDrawer key={i} {...commonFormDrawerProps} />;
-          case "blue":
-            return <BlueFormDrawer key={i} {...commonFormDrawerProps} />;
-        }
-      })}
-
       {drawers.map((drawer, i) => {
         const commonDrawerProps = {
           position: "right" as DrawerProps["position"],
-          index: drawer.index,
+          stackIndex: drawer.stackIndex,
           ...drawer.drawerProps,
           closeOnEscape:
             drawer.drawerProps?.closeOnEscape !== undefined
               ? drawer.drawerProps.closeOnEscape
               : drawers.length === i + 1,
           opened:
-            formDrawers.length > 0
+            priorityDrawerIndexStack.length > 0 &&
+              priorityDrawerIndexStack[priorityDrawerIndexStack.length - 1] !==
+              drawer.stackIndex
               ? false
               : drawer.drawerProps?.opened === undefined
                 ? true
                 : drawer.drawerProps?.opened,
           onClose: () => {
-            closeDrawer(drawer.index);
+            closeDrawer(drawer.stackIndex);
             drawer.drawerProps?.onClose?.();
           },
           withOverlay: false,
@@ -79,6 +50,19 @@ export const DrawerStack = () => {
 
           case "blue":
             return <BlueDrawer key={i} {...commonDrawerProps} />;
+
+          case "redForm":
+            return <RedFormDrawer key={i} {...commonDrawerProps} withOverlay />;
+
+          case "greenForm":
+            return (
+              <GreenFormDrawer key={i} {...commonDrawerProps} withOverlay />
+            );
+
+          case "blueForm":
+            return (
+              <BlueFormDrawer key={i} {...commonDrawerProps} withOverlay />
+            );
         }
       })}
     </>

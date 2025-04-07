@@ -28,11 +28,41 @@ export type DrawerBlue = {
   blueEntityId?: string;
 };
 
+export type DrawerFormRed = {
+  type: "redForm";
+  redProp?: string;
+  redEntityId?: string;
+};
+
+export type DrawerFormGreen = {
+  type: "greenForm";
+  greenProp?: string;
+  greenEntityId?: string;
+};
+
+export type DrawerFormBlue = {
+  type: "blueForm";
+  blueProp?: string;
+  blueEntityId?: string;
+};
+
 // --------------------------------------------
 
-export type DrawerTypes = "red" | "green" | "blue";
+export type DrawerTypes =
+  | "red"
+  | "green"
+  | "blue"
+  | "redForm"
+  | "greenForm"
+  | "blueForm";
 
-export type DrawerCustomProps = DrawerRed | DrawerGreen | DrawerBlue;
+export type DrawerCustomProps =
+  | DrawerRed
+  | DrawerGreen
+  | DrawerBlue
+  | DrawerFormRed
+  | DrawerFormGreen
+  | DrawerFormBlue;
 
 export type ExtractDrawerProps<T extends DrawerCustomProps["type"]> = Extract<
   DrawerCustomProps,

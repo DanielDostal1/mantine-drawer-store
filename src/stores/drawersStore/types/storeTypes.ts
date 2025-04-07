@@ -1,53 +1,31 @@
-import { DrawerTypes, DrawerProps } from "./drawersTypes";
-import { FormDrawerTypes, FormDrawerProps } from "./formDrawersTypes";
+import { DrawerTypes, DrawerProps } from "./drawerTypes";
 
-export * from "./drawersTypes";
-export * from "./formDrawersTypes";
+export * from "./drawerTypes";
 
 export type Drawer<T extends DrawerTypes> = {
-  index: number;
+  stackIndex: number;
   type: T;
+  isPriorityDrawer?: boolean;
   drawerProps?: DrawerProps<T>;
-};
-
-export type FormDrawer<T extends FormDrawerTypes> = {
-  index: number;
-  type: T;
-  formDrawerProps?: FormDrawerProps<T>;
 };
 
 export type OpenDrawerProps<T extends DrawerTypes> = {
-  index: number;
+  stackIndex: number;
   type: T;
+  isPriorityDrawer?: boolean;
   drawerProps?: DrawerProps<T>;
-};
-export type OpenFormDrawerProps<T extends FormDrawerTypes> = {
-  index: number;
-  type: T;
-  formDrawerProps?: FormDrawerProps<T>;
 };
 
 export type DrawerStore = {
   drawers: Drawer<DrawerTypes>[];
-  formDrawers: FormDrawer<FormDrawerTypes>[];
+  priorityDrawerIndexStack: number[];
 
   actions: {
     openDrawer: <T extends DrawerTypes>(args: OpenDrawerProps<T>) => void;
     updateDrawer: <T extends DrawerTypes>(args: {
-      index: number;
+      stackIndex: number;
       drawerProps?: DrawerProps<T>;
     }) => void;
-    closeDrawer: (index: number) => void;
-  };
-
-  formActions: {
-    openFormDrawer: <T extends FormDrawerTypes>(
-      args: OpenFormDrawerProps<T>,
-    ) => void;
-    updateFormDrawer: <T extends FormDrawerTypes>(args: {
-      index: number;
-      formDrawerProps?: FormDrawerProps<T>;
-    }) => void;
-    closeFormDrawer: (index: number) => void;
+    closeDrawer: (stackIndex: number) => void;
   };
 };

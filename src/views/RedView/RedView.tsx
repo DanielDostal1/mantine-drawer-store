@@ -7,7 +7,7 @@ export const RedView = () => {
 
   const openRedDrawer = useCallback(() => {
     openDrawer({
-      index: 0,
+      stackIndex: 0,
       type: "red",
       drawerProps: { size: "md", redProp: "red prop" },
     });

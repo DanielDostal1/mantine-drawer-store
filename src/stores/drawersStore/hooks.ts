@@ -14,11 +14,6 @@ export const useDrawerStore = <T>(selector: (state: DrawerStore) => T) => {
 export const useDrawers = () => useDrawerStore((state) => state.drawers);
 export const useDrawerActions = () => useDrawerStore((state) => state.actions);
 
-export const useFormDrawers = () =>
-  useDrawerStore((state) => state.formDrawers);
-export const useFormDrawerActions = () =>
-  useDrawerStore((state) => state.formActions);
-
 // --- custom drawer hooks ----------------------------------------------------
 
 // ...

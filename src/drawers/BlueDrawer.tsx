@@ -6,7 +6,7 @@ import {
 } from "../stores/drawersStore/hooks";
 
 type BlueDrawerProps = DrawerProps & {
-  index: number;
+  stackIndex: number;
   blueEntityId?: string;
   blueProp?: string;
 };
@@ -14,7 +14,7 @@ type BlueDrawerProps = DrawerProps & {
 export const BlueDrawer = ({
   opened,
   onClose,
-  index,
+  stackIndex,
   blueEntityId,
   blueProp,
   ...props
@@ -22,28 +22,28 @@ export const BlueDrawer = ({
   console.log({ blueEntityId, blueProp });
 
   const { openDrawer } = useDrawerActions();
-  const { openFormDrawer } = useFormDrawerActions();
 
   const openRedDrawer = useCallback(() => {
     openDrawer({
-      index: index + 1,
+      stackIndex: stackIndex + 1,
       type: "red",
     });
-  }, [index, openDrawer]);
+  }, [stackIndex, openDrawer]);
 
   const openGreenDrawer = useCallback(() => {
     openDrawer({
-      index: index + 1,
+      stackIndex: stackIndex + 1,
       type: "green",
     });
-  }, [index, openDrawer]);
+  }, [stackIndex, openDrawer]);
 
   const openBlueFormDrawer = useCallback(() => {
-    openFormDrawer({
-      index: 0,
-      type: "blue",
+    openDrawer({
+      stackIndex: stackIndex + 1,
+      type: "blueForm",
+      isPriorityDrawer: true,
     });
-  }, [openFormDrawer]);
+  }, [openDrawer, stackIndex]);
 
   return (
     <>

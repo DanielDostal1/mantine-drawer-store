@@ -2,12 +2,9 @@ import { createStore } from "zustand";
 import {
   DrawerStore,
   OpenDrawerProps,
-  OpenFormDrawerProps,
   Drawer,
   DrawerProps,
   DrawerTypes,
-  FormDrawerProps,
-  FormDrawerTypes,
 } from "./types/storeTypes";
 
 export type CreateDrawerStoreProps = {
@@ -17,34 +14,52 @@ export type CreateDrawerStoreProps = {
 const createDrawerStore = ({ initialDrawers = [] }: CreateDrawerStoreProps) =>
   createStore<DrawerStore>((set, get) => {
     function openDrawer<T extends DrawerTypes>({
-      index,
+      stackIndex,
       type,
+      isPriorityDrawer = false,
       drawerProps = {} as DrawerProps<T>,
     }: OpenDrawerProps<T>) {
       const drawers = get().drawers;
-      if (drawers.length > index) {
-        if (drawers[index].type === type) {
-          updateDrawer({ index, drawerProps: { ...drawerProps } });
-          closeDrawer(index + 1);
+      if (drawers.length > stackIndex) {
+        if (drawers[stackIndex].type === type) {
+          updateDrawer({
+            stackIndex,
+            drawerProps: { ...drawerProps },
+          });
+          closeDrawer(stackIndex + 1);
           return;
         }
       }
-      closeDrawer(index);
-      setTimeout(() => _openDrawer({ index, type, drawerProps }), 200);
+      closeDrawer(stackIndex); // Close all drawers after the current one
+      setTimeout(
+        () => _openDrawer({ stackIndex, type, isPriorityDrawer, drawerProps }),
+        0,
+      );
     }
 
     function _openDrawer<T extends DrawerTypes>({
-      index,
+      stackIndex,
       type,
+      isPriorityDrawer = false,
       drawerProps = {} as DrawerProps<T>,
     }: OpenDrawerProps<T>) {
+      if (isPriorityDrawer) {
+        set({
+          priorityDrawerIndexStack: [
+            ...get().priorityDrawerIndexStack,
+            stackIndex,
+          ],
+        });
+      }
+
       set((state: DrawerStore) => ({
         ...state,
         drawers: [
           ...state.drawers,
           {
-            index,
+            stackIndex,
             type,
+            isPriorityDrawer,
             drawerProps: { ...drawerProps, opened: false },
           },
         ],
@@ -52,137 +67,56 @@ const createDrawerStore = ({ initialDrawers = [] }: CreateDrawerStoreProps) =>
       setTimeout(
         () =>
           updateDrawer({
-            index,
+            stackIndex,
             drawerProps: { ...drawerProps, opened: true },
           }),
         0,
       );
     }
 
-    function openFormDrawer<T extends FormDrawerTypes>({
-      index,
-      type,
-      formDrawerProps = {} as FormDrawerProps<T>,
-    }: OpenFormDrawerProps<T>) {
-      const formDrawers = get().formDrawers;
-      if (formDrawers.length > index) {
-        if (formDrawers[index].type === type) {
-          updateFormDrawer({ index, formDrawerProps });
-          closeFormDrawer(index + 1);
-          return;
-        }
-      }
-      closeFormDrawer(index);
-      setTimeout(() => _openFormDrawer({ index, type, formDrawerProps }), 200);
-    }
-
-    function _openFormDrawer<T extends FormDrawerTypes>({
-      index,
-      type,
-      formDrawerProps = {} as FormDrawerProps<T>,
-    }: OpenFormDrawerProps<T>) {
-      set((state: DrawerStore) => ({
-        ...state,
-        formDrawers: [
-          ...state.formDrawers,
-          {
-            index,
-            type,
-            formDrawerProps: { ...formDrawerProps, opened: false },
-          },
-        ],
-      }));
-      setTimeout(
-        () =>
-          updateFormDrawer({
-            index,
-            formDrawerProps: { ...formDrawerProps, opened: true },
-          }),
-        0,
-      );
-    }
-
     function updateDrawer<T extends DrawerTypes>({
-      index,
+      stackIndex,
       drawerProps,
     }: {
-      index: number;
+      stackIndex: number;
       drawerProps?: DrawerProps<T>;
     }) {
       set((state: DrawerStore) => ({
         drawers: state.drawers.map((drawer, i) =>
-          i === index
+          i === stackIndex
             ? {
-                ...drawer,
-                drawerProps: { ...drawer.drawerProps, ...drawerProps },
-              }
+              ...drawer,
+              drawerProps: { ...drawer.drawerProps, ...drawerProps },
+            }
             : drawer,
         ),
       }));
     }
 
-    function updateFormDrawer<T extends FormDrawerTypes>({
-      index,
-      formDrawerProps,
-    }: {
-      index: number;
-      formDrawerProps?: FormDrawerProps<T>;
-    }) {
-      set((state: DrawerStore) => ({
-        formDrawers: state.formDrawers.map((formDrawer, i) =>
-          i === index
-            ? {
-                ...formDrawer,
-                formDrawerProps: {
-                  ...formDrawer.formDrawerProps,
-                  ...formDrawerProps,
-                },
-              }
-            : formDrawer,
-        ),
-      }));
-    }
-
-    function closeDrawer(index: number) {
+    function closeDrawer(stackIndex: number) {
       const drawers = get().drawers;
-      for (let i = index; i < drawers.length; i++) {
-        updateDrawer({ index: i, drawerProps: { opened: false } });
-        setTimeout(() => _removeDrawer(i), 200);
+      for (let i = stackIndex; i < drawers.length; i++) {
+        updateDrawer({ stackIndex: i, drawerProps: { opened: false } });
+        setTimeout(() => _removeDrawer(i), 200); // Delay removal to allow closing animation
       }
     }
 
-    function _removeDrawer(index: number) {
+    function _removeDrawer(stackIndex: number) {
       set((state) => ({
-        drawers: state.drawers.filter((_, i) => index !== i),
-      }));
-    }
-
-    function closeFormDrawer(index: number) {
-      const forms = get().formDrawers;
-      for (let i = index; i < forms.length; i++) {
-        updateFormDrawer({ index: i, formDrawerProps: { opened: false } });
-        setTimeout(() => _removeFormDrawer(i), 200);
-      }
-    }
-
-    function _removeFormDrawer(index: number) {
-      set((state) => ({
-        formDrawers: state.formDrawers.filter((_, i) => index !== i),
+        drawers: state.drawers.filter((_, i) => stackIndex !== i),
+        priorityDrawerIndexStack: state.priorityDrawerIndexStack.filter(
+          (index) => index !== stackIndex,
+        ),
       }));
     }
 
     return {
       drawers: initialDrawers,
-      formDrawers: [],
+      priorityDrawerIndexStack: [],
       actions: {
         openDrawer,
         updateDrawer,
         closeDrawer,
-      },
-      formActions: {
-        openFormDrawer,
-        updateFormDrawer,
-        closeFormDrawer,
       },
     };
   });

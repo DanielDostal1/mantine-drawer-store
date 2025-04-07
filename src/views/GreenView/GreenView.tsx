@@ -6,7 +6,7 @@ export const GreenView = () => {
   const { openDrawer } = useDrawerActions();
   const openGreenDrawer = useCallback(() => {
     openDrawer({
-      index: 0,
+      stackIndex: 0,
       type: "green",
       drawerProps: { size: "md", greenProp: "green prop" },
     });

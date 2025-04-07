@@ -6,7 +6,7 @@ export const BlueView = () => {
   const { openDrawer } = useDrawerActions();
   const openBlueDrawer = useCallback(() => {
     openDrawer({
-      index: 0,
+      stackIndex: 0,
       type: "blue",
       drawerProps: { size: "md", blueProp: "blue prop" },
     });
